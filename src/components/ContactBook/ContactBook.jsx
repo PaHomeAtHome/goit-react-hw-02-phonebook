@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 import { nanoid } from 'nanoid'
@@ -10,7 +10,6 @@ const NUMBER_INPUT_TITLE = "Phone number must be digits and can contain spaces, 
 const ErrorText = styled.p`
   color: red;
 `;
-
 const FormError = ({ name }) => {
   return (
     <ErrorMessage
@@ -32,19 +31,27 @@ const initialValues = {
 };
 
 export const ContactBook = () => {
-    const handleSubmit = (values, { resetForm }) => {
+    const handleSubmit = (values, { resetForm }, push) => {
     values.id = nanoid();
-    console.log(values);
-    resetForm();
+        const { name, number } = values;
+        const contact = {
+           [name]: number,
+        }
+        values.contacts.push(contact)
+        console.log(values.contacts)
+
+        resetForm();
   };
 
-  return (
+    return (
     <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            enableReinitialize
     >
-      <Form autoComplete="off">
+            <Form autoComplete="off">
+                <h2>Phonebook</h2>
         <div>
           <label htmlFor="name">Name</label>
           <div>
@@ -59,9 +66,9 @@ export const ContactBook = () => {
             <FormError name="number" />
           </div>
         </div>
-        
-        <button type="submit">Add contact</button>
-      </Form>
-    </Formik>
-  );
+                <button type="submit">Add contact</button> 
+                <h2>Contacts</h2>
+            </Form>
+        </Formik>
+    );
 };
