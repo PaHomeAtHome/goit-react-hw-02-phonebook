@@ -24,17 +24,17 @@ const validationSchema = Yup.object({
   number: Yup.string().required(),
 });
 
-export const ContactForm = ({ initialValues, handleSubmit } ) => {
+export const ContactForm = ({ handleSubmit } ) => {
 
         return (
             <Formik
                 
-                initialValues={initialValues}
+                initialValues={{ name: '', number: '' }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
                 enableReinitialize
             >
-                {({ values }) => (
+                
                 <Form autoComplete="off">
                     <div>
                         <label htmlFor="name">Name</label>
@@ -54,7 +54,7 @@ export const ContactForm = ({ initialValues, handleSubmit } ) => {
                         <h2>Contacts</h2>
                         <label htmlFor="filter">Find contacts by name</label>
                 
-                </Form>)}
+                </Form>
             </Formik>
         );
     };

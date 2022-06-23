@@ -15,8 +15,7 @@ export class App extends Component {
         {id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: ''
+
   };
 
   handleSubmit = ({ name, number }) => {
@@ -55,7 +54,7 @@ export class App extends Component {
 
     return <Container>
       <h2>Phonebook</h2>
-      <ContactForm initialValues={this.state} handleSubmit={this.handleSubmit} />
+      <ContactForm handleSubmit={this.handleSubmit} />
 
       <h2>Contacts</h2>
       <Filter filterContacts={this.filterContacts} />
