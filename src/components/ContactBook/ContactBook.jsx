@@ -11,6 +11,20 @@ const ErrorText = styled.p`
   color: red;
 `;
 
+const Element = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
+const Button = styled.button`
+margin-left: 10px;
+color: white;
+background-color: #CC000099;
+cursor: pointer;
+border: 1px solid grey;
+border-radius: 5px;`
+
 const FormError = ({ name }) => {
   return (
     <ErrorMessage
@@ -26,7 +40,12 @@ const validationSchema = Yup.object({
 });
 
 const initialValues = {
-    contacts: [],
+    contacts: [
+        {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+        {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+        {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+        {id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     filter: '',
     name: '',
     number: ''
@@ -34,16 +53,23 @@ const initialValues = {
 
 export const ContactBook = () => {
     const handleSubmit = (values, { resetForm }) => {
+
         const { name, number } = values;
-        const contact = {
-            name: name,
-            number: number,
-            id: nanoid()
+
+        if (values.contacts.find(contact => contact.name === name)) {
+            alert(name + ' is already in contacts');
+            return;
         }
+            const contact = {
+            name,
+            number,
+            id: nanoid(),
+        }
+
         values.contacts.push(contact)
-        console.log(values.contacts)
 
         resetForm();
+        return;
     }
 
     const filterContacts = (values) => {
@@ -51,12 +77,19 @@ export const ContactBook = () => {
         return;
     }
 
+    const deleteContact = (values, index) => {
+
+        values.contacts = values.contacts.filter((contact, i) => i !== index);
+        console.log(values.contacts);
+        return;
+    }
+
         return (
             <Formik
+                
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
-               onInput={filterContacts}
             >
                 {({ values }) => (
                 <Form autoComplete="off">
@@ -80,10 +113,11 @@ export const ContactBook = () => {
                         <label htmlFor="filter">Find contacts by name</label>
                         <div><Field name="filter" type="text" placeholder="Name" pattern={NAME_INPUT_PATTERN} title={NAME_INPUT_TITLE} onInput={filterContacts}/></div>
 
-                        {values.filter === '' ? values.contacts.map(contact => {
-                            return <p key={contact.id}>{contact.name}: {contact.number}</p>
-                        }) : values.contacts.filter(contact => contact.name.toLowerCase().includes(values.filter.toLowerCase()))
-                            .map(contact => <p key={contact.id}>{contact.name}: {contact.number}</p>)}
+                        {values.filter === '' ? values.contacts.map((contact, index)=> <Element key={contact.id}><p>{contact.name}: {contact.number}</p><Button type="button" onClick={() => deleteContact(values, index)} value={index}>Delete</Button></Element>
+                        )
+                            
+                        : values.contacts.filter(contact => contact.name.toLowerCase().includes(values.filter.toLowerCase()))
+                        .map(contact => <p key={contact.id}>{contact.name}: {contact.number}</p>)}
                 
                 </Form>)}
             </Formik>

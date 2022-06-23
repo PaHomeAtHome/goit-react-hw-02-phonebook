@@ -6,6 +6,7 @@ const ContainerStyle = styled.div`
     padding-left: 15px;
     padding-right: 15px;
     background: linear-gradient(#0066AA, white);
-    text-align: center;`
+    text-align: center;
+    padding-top: 20px`
 
 export default ContainerStyle;
