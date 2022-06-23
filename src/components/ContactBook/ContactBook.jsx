@@ -77,9 +77,9 @@ export const ContactBook = () => {
         return;
     }
 
-    const deleteContact = (values, index) => {
+    const deleteContact = (values, id) => {
 
-        values.contacts = values.contacts.filter((contact, i) => i !== index);
+        values.contacts = values.contacts.filter((contact) => contact.id !== id);
         console.log(values.contacts);
         return;
     }
@@ -113,7 +113,7 @@ export const ContactBook = () => {
                         <label htmlFor="filter">Find contacts by name</label>
                         <div><Field name="filter" type="text" placeholder="Name" pattern={NAME_INPUT_PATTERN} title={NAME_INPUT_TITLE} onInput={filterContacts}/></div>
 
-                        {values.filter === '' ? values.contacts.map((contact, index)=> <Element key={contact.id}><p>{contact.name}: {contact.number}</p><Button type="button" onClick={() => deleteContact(values, index)} value={index}>Delete</Button></Element>
+                        {values.filter === '' ? values.contacts.map((contact, index)=> <Element key={contact.id}><p>{contact.name}: {contact.number}</p><Button type="button" onClick={() => deleteContact(values, contact.id)} value={index}>Delete</Button></Element>
                         )
                             
                         : values.contacts.filter(contact => contact.name.toLowerCase().includes(values.filter.toLowerCase()))
