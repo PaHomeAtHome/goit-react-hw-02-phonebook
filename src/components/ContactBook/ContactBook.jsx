@@ -22,11 +22,12 @@ const FormError = ({ name }) => {
 
 const validationSchema = Yup.object({
   name: Yup.string().required(),
-  number: Yup.number().required(),
+  number: Yup.string().required(),
 });
 
 const initialValues = {
     contacts: [],
+    filter: '',
     name: '',
     number: ''
 };
@@ -35,8 +36,8 @@ export const ContactBook = () => {
     const handleSubmit = (values, { resetForm }) => {
         const { name, number } = values;
         const contact = {
-            name: [name],
-            number: [number],
+            name: name,
+            number: number,
             id: nanoid()
         }
         values.contacts.push(contact)
@@ -45,12 +46,17 @@ export const ContactBook = () => {
         resetForm();
     }
 
+    const filterContacts = (values) => {
+        values.filter = values.target.value;
+        return;
+    }
+
         return (
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
-               
+               onInput={filterContacts}
             >
                 {({ values }) => (
                 <Form autoComplete="off">
@@ -58,7 +64,7 @@ export const ContactBook = () => {
                     <div>
                         <label htmlFor="name">Name</label>
                         <div>
-                            <Field name="name" type="text" placeholder="Full name" pattern={NAME_INPUT_PATTERN} title={NAME_INPUT_TITLE} />
+                            <Field name="name" type="text" placeholder="Name" pattern={NAME_INPUT_PATTERN} title={NAME_INPUT_TITLE} />
                             <FormError name="name" />
                         </div>
                     </div>
@@ -70,11 +76,14 @@ export const ContactBook = () => {
                         </div>
                     </div>
                     <button type="submit">Add contact</button>
-                    <h2>Contacts</h2>
-                        {values.contacts.map(contact => {
-                            return <p key={contact.id}>{contact.name}: {contact.number} ({contact.id})</p>
-                        })
-                        }
+                        <h2>Contacts</h2>
+                        <label htmlFor="filter">Find contacts by name</label>
+                        <div><Field name="filter" type="text" placeholder="Name" pattern={NAME_INPUT_PATTERN} title={NAME_INPUT_TITLE} onInput={filterContacts}/></div>
+
+                        {values.filter === '' ? values.contacts.map(contact => {
+                            return <p key={contact.id}>{contact.name}: {contact.number}</p>
+                        }) : values.contacts.filter(contact => contact.name.toLowerCase().includes(values.filter.toLowerCase()))
+                            .map(contact => <p key={contact.id}>{contact.name}: {contact.number}</p>)}
                 
                 </Form>)}
             </Formik>
