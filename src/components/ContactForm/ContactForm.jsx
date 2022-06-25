@@ -51,8 +51,6 @@ export const ContactForm = ({ handleSubmit } ) => {
                         </div>
                     </div>
                     <button type="submit">Add contact</button>
-                        <h2>Contacts</h2>
-                        <label htmlFor="filter">Find contacts by name</label>
                 
                 </Form>
             </Formik>

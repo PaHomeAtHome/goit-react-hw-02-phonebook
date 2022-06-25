@@ -9,5 +9,3 @@ export const ContactList = ({ values, deleteContact }) =>
                 .map(contact => <ContactListComponent key={contact.id} contact={contact} deleteContact={deleteContact}/>)}
 
     </ul>
-    
-    

@@ -18,10 +18,10 @@ export class App extends Component {
 
   };
 
-  handleSubmit = ({ name, number }) => {
+  handleSubmit = ({ name, number }, {resetForm }) => {
     
     if (this.state.contacts.find(contact => contact.name === name)) {
-            alert(name + ' is already in contacts');
+      alert(name + ' is already in contacts');
             return;
         }
 
@@ -35,6 +35,7 @@ export class App extends Component {
       contacts: [contact, ...contacts],
     }));
 
+    resetForm();
     return;
   };
 
@@ -61,5 +62,4 @@ export class App extends Component {
       <ContactList values={this.state} deleteContact={this.deleteContact} />
     </Container>
   }
-  
 };
